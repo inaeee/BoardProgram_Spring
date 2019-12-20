@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.board.boardsub.mapper.BoardMapper">
+	<select id="boardCount" resultType="int">
+		SELECT COUNT(*) FROM BOARD
+	</select>
+	
+	<select id="boardList" resultType="com.example.board.boardsub.domain.BoardVO">
+		SELECT * FROM BOARD
+	</select>
+	
+	<select id="boardDetail" parameterType="int" resultType="com.example.board.boardsub.domain.BoardVO">
+		SELECT * FROM BOARD WHERE BNO = #{bno}
+	</select>
+	
+	<insert id="boardInsert" parameterType="com.example.board.boardsub.domain.BoardVO" useGeneratedKeys="true" keyProperty="bno">
+		INSERT INTO 
+		board(bno, subject, content, writer, reg_date) 
+		VALUES(#{bno}, #{subject} ,#{content}, #{writer}, now())
+	</insert>
+	
+	<insert id="fileInsert" parameterType="com.example.board.boardsub.domain.FileVO">
+		INSERT INTO
+		files(fno, bno, fileName, fileOriName, fileUrl)
+		VALUES(#{fno}, #{bno}, #{fileName}, #{fileOriName}, #{fileUrl})
+	</insert>
+	
+	<select id="fileDetail" parameterType="int" resultType="com.example.board.boardsub.domain.FileVO">
+		SELECT * FROM files WHERE bno = #{bno}
+	</select>
+	
+	<update id="boardUpdate" parameterType="com.example.board.boardsub.domain.BoardVO">
+		UPDATE BOARD SET 
+		<if test="subject != null">
+			SUBJECT = #{subject}
+		</if>
+		<if test="subject != null and content != null"> , </if>
+		<if test="content != null">
+			CONTENT = #{content}
+		</if>
+		WHERE BNO = #{bno}
+	</update>
+	
+	<delete id="boardDelete" parameterType="int">
+		DELETE FROM BOARD WHERE BNO = #{bno}
+	</delete>
+	
+</mapper>
